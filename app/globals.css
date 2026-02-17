@@ -1,0 +1,412 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================================================
+   CORES / IDENTIDADE SÃO TOMÉ E PRÍNCIPE (OKLCH)
+   ========================================================= */
+
+:root {
+  /* Cores inspiradas em São Tomé e Príncipe */
+  --verde-stp: oklch(0.55 0.15 140); /* verde floresta */
+  --amarelo-stp: oklch(0.85 0.18 85); /* amarelo ouro */
+  --vermelho-stp: oklch(0.55 0.22 30); /* vermelho vibrante */
+  --preto-stp: oklch(0.15 0.02 260); /* preto suave */
+  --azul-mar: oklch(0.55 0.10 220); /* azul oceano */
+
+  /* Tema claro (padrão) */
+  --background: oklch(0.98 0.005 90);
+  --foreground: var(--preto-stp);
+
+  --card: oklch(1 0 0);
+  --card-foreground: var(--preto-stp);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--preto-stp);
+
+  --primary: var(--verde-stp);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: var(--amarelo-stp);
+  --secondary-foreground: var(--preto-stp);
+
+  --muted: oklch(0.92 0.01 90);
+  --muted-foreground: oklch(0.4 0.02 260);
+
+  --accent: var(--vermelho-stp);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.85 0.02 90);
+  --input: oklch(0.92 0.01 90);
+  --ring: var(--verde-stp);
+
+  --chart-1: var(--verde-stp);
+  --chart-2: var(--amarelo-stp);
+  --chart-3: var(--vermelho-stp);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  --radius: 0.75rem;
+
+  /* Sidebar */
+  --sidebar: oklch(0.98 0.005 90);
+  --sidebar-foreground: var(--preto-stp);
+  --sidebar-primary: var(--verde-stp);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: var(--amarelo-stp);
+  --sidebar-accent-foreground: var(--preto-stp);
+  --sidebar-border: oklch(0.85 0.02 90);
+  --sidebar-ring: var(--verde-stp);
+
+  /* =========================================================
+     FUNDO TEMÁTICO (CONTROLÁVEL)
+     - podes ativar imagem também no light se quiseres
+     ========================================================= */
+
+  /* ✅ imagem opcional no LIGHT:
+     coloca a imagem em public/images/...
+     e descomenta abaixo */
+  /* --stp-bg-image: url("/images/Sao_Tome-To-see-Praia_Banana.jpg"); */
+  --stp-bg-image: none;
+
+  /* 🔧 Controles (quanto MENOR o overlay, mais aparece a imagem) */
+  --stp-bg-overlay: 0.10;      /* light overlay (0.06 a 0.15) */
+  --stp-bg-brightness: 1.15;   /* 1.0 normal | 1.1 a 1.25 mais claro */
+  --stp-bg-saturate: 1.10;     /* 1.0 normal | 1.05 a 1.25 mais vivo */
+  --stp-bg-contrast: 1.02;     /* 1.0 normal | 1.05 um pouco mais definido */
+}
+
+.dark {
+  /* Dark mode (sem preto chapado) */
+  --background: oklch(0.12 0.01 140 / 0.95);
+  --foreground: oklch(0.97 0 0);
+
+  --card: oklch(0.18 0.02 140 / 0.60);
+  --card-foreground: oklch(0.97 0 0);
+
+  --popover: oklch(0.15 0.02 140 / 0.95);
+  --popover-foreground: oklch(0.97 0 0);
+
+  --primary: var(--amarelo-stp);
+  --primary-foreground: var(--preto-stp);
+
+  --secondary: var(--verde-stp);
+  --secondary-foreground: oklch(1 0 0);
+
+  --muted: oklch(0.22 0.03 140);
+  --muted-foreground: oklch(0.70 0 0);
+
+  --accent: var(--vermelho-stp);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.30 0.04 90);
+  --input: oklch(0.20 0.02 140);
+  --ring: var(--amarelo-stp);
+
+  --sidebar: oklch(0.15 0.02 140 / 0.95);
+  --sidebar-foreground: oklch(0.97 0 0);
+  --sidebar-primary: var(--amarelo-stp);
+  --sidebar-primary-foreground: var(--preto-stp);
+  --sidebar-accent: var(--verde-stp);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.30 0.04 90);
+  --sidebar-ring: var(--amarelo-stp);
+
+  /* ✅ imagem opcional no DARK (recomendado):
+     1) coloca em public/images/...
+     2) descomenta abaixo */
+  --stp-bg-image: url("/images/Sao_Tome-To-see-Praia_Banana.jpg");
+
+  /* 🔧 Controles para a imagem aparecer MAIS no dark */
+  --stp-bg-overlay: 0.26;      /* dark overlay (0.20 a 0.40) */
+  --stp-bg-brightness: 1.22;
+  --stp-bg-saturate: 1.18;
+  --stp-bg-contrast: 1.05;
+}
+
+/* =========================================================
+   MAPEAMENTO TAILWIND v4 (@theme inline)
+   ========================================================= */
+
+@theme inline {
+  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* =========================================================
+   BASE (SEM @apply border-border -> NÃO QUEBRA BUILD)
+   ========================================================= */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    position: relative;
+  }
+}
+
+/* =========================================================
+   FUNDO GLOBAL (LIGHT e DARK)
+   - Usa imagem opcional via --stp-bg-image
+   - Controla brilho/saturação/overlay via variáveis
+   ========================================================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  /* Camadas: (1) imagem opcional + (2) gradientes suaves */
+  background-image:
+    var(--stp-bg-image),
+    radial-gradient(1100px 700px at 15% 0%, oklch(0.85 0.18 85 / 0.14) 0%, transparent 55%),
+    radial-gradient(1200px 700px at 85% 10%, oklch(0.55 0.10 220 / 0.12) 0%, transparent 60%),
+    radial-gradient(900px 600px at 50% 110%, oklch(0.55 0.15 140 / 0.10) 0%, transparent 55%);
+
+  background-size: cover, cover, cover, cover;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat;
+
+  filter: brightness(var(--stp-bg-brightness))
+          saturate(var(--stp-bg-saturate))
+          contrast(var(--stp-bg-contrast));
+}
+
+/* Overlay leve para leitura */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: oklch(0.98 0.005 90 / var(--stp-bg-overlay));
+}
+
+/* Dark: overlay troca automaticamente (porque --stp-bg-overlay muda no .dark) */
+.dark body::after {
+  background: oklch(0.12 0.01 140 / var(--stp-bg-overlay));
+}
+
+/* Textura de ondas sutil (opcional) */
+.dark body {
+  /* nada aqui para não “matar” a imagem */
+}
+
+.dark body::marker {
+  /* noop */
+}
+
+.dark body ._noop {
+  /* noop */
+}
+
+.dark body::selection {
+  background: oklch(0.85 0.18 85 / 0.30);
+  color: oklch(0.15 0.02 260);
+}
+
+/* Ondas (bem leve) */
+.dark body::before {
+  /* mantém tudo e ainda adiciona onda sutil com blend via opacity */
+}
+
+.dark body .stp-wave-overlay {
+  /* opcional se quiseres usar no HTML */
+}
+
+.dark body::after {
+  /* overlay do dark já acima */
+}
+
+/* Se quiseres realmente a onda em todo o dark, usa este pseudo a mais */
+.dark body[data-waves="on"]::after {
+  /* overlay base + ondas (2 backgrounds) */
+  background-image:
+    linear-gradient(oklch(0.12 0.01 140 / var(--stp-bg-overlay)), oklch(0.12 0.01 140 / var(--stp-bg-overlay))),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' opacity='0.07'%3E%3Cpath d='M0 50 Q 25 30, 50 50 T 100 50 T 150 50 T 200 50' stroke='%23ffffff' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+  background-size: cover, auto;
+}
+
+/* =========================================================
+   ANIMAÇÕES
+   ========================================================= */
+
+@keyframes float {
+  0%,
+  100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(0, 150, 0, 0.3); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.6s ease-out forwards; }
+.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+.animate-scale-in { animation: scale-in 0.4s ease-out forwards; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* =========================================================
+   EFEITOS EXTRAS
+   ========================================================= */
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.dark .glass {
+  background: rgba(0, 40, 0, 0.18);
+  border-color: rgba(255, 215, 0, 0.20);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--verde-stp), var(--amarelo-stp));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(255, 215, 0, 0.25);
+}
+
+.img-zoom {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.img-zoom:hover {
+  transform: scale(1.08);
+}
+
+/* Faixa com cores da bandeira */
+.flag-stripe {
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--verde-stp) 0%,
+    var(--amarelo-stp) 30%,
+    var(--vermelho-stp) 60%,
+    var(--preto-stp) 100%
+  );
+  width: 100%;
+}
+
+/* Botões STP */
+.btn-stp {
+  background: linear-gradient(135deg, var(--verde-stp), var(--amarelo-stp));
+  color: var(--preto-stp);
+  border: none;
+  transition: all 0.3s;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-stp:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 10px 25px -5px rgba(255, 215, 0, 0.35);
+}
