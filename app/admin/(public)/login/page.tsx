@@ -1,99 +1,119 @@
-"use client"
+import { cookies, headers } from "next/headers"
+import { NextResponse } from "next/server"
+import crypto from "crypto"
+import { prisma } from "@/lib/server/prisma"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Lock, Mail } from "lucide-react"
+const COOKIE_NAME = "admin_session"
+const SESSION_DAYS = 7
 
-export default function AdminLoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+function sha256(input: string): string {
+  return crypto.createHash("sha256").update(input).digest("hex")
+}
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        setError(json?.error ?? "Falha no login")
-        return
-      }
-      router.push("/admin")
-      router.refresh()
-    } catch {
-      setError("Erro de rede")
-    } finally {
-      setLoading(false)
-    }
+function nowPlusDays(days: number): Date {
+  const d = new Date()
+  d.setDate(d.getDate() + days)
+  return d
+}
+
+/**
+ * Normaliza cookies()/headers() para suportar versões/runtimes onde retornam
+ * diretamente o store OU uma Promise.
+ */
+async function getCookieStore(): Promise<any> {
+  const c: any = cookies()
+  return typeof c?.then === "function" ? await c : c
+}
+
+async function getHeaderStore(): Promise<any> {
+  const h: any = headers()
+  return typeof h?.then === "function" ? await h : h
+}
+
+export async function getClientIp(): Promise<string | undefined> {
+  const h = await getHeaderStore()
+  const xff = h.get("x-forwarded-for")
+  if (xff) return xff.split(",")[0].trim()
+  return h.get("x-real-ip") ?? undefined
+}
+
+export async function createAdminSession(
+  adminUserId: string
+): Promise<{ token: string; expiresAt: Date }> {
+  const token = crypto.randomBytes(32).toString("hex")
+  const tokenHash = sha256(token)
+  const expiresAt = nowPlusDays(SESSION_DAYS)
+
+  await prisma.adminSession.create({
+    data: { adminUserId, tokenHash, expiresAt },
+  })
+
+  return { token, expiresAt }
+}
+
+export function setAdminSessionCookie(res: NextResponse, token: string, expiresAt: Date) {
+  res.cookies.set({
+    name: COOKIE_NAME,
+    value: token,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: expiresAt,
+  })
+}
+
+export function clearAdminSessionCookie(res: NextResponse) {
+  res.cookies.set({
+    name: COOKIE_NAME,
+    value: "",
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: new Date(0),
+  })
+}
+
+export async function deleteCurrentAdminSession(): Promise<void> {
+  const cookieStore = await getCookieStore()
+  const token = cookieStore.get(COOKIE_NAME)?.value
+  if (!token) return
+  const tokenHash = sha256(token)
+  await prisma.adminSession.deleteMany({ where: { tokenHash } })
+}
+
+export async function getAdminFromCookies() {
+  const cookieStore = await getCookieStore()
+  const token = cookieStore.get(COOKIE_NAME)?.value
+  if (!token) return null
+
+  const tokenHash = sha256(token)
+  const session = await prisma.adminSession.findUnique({
+    where: { tokenHash },
+    include: { adminUser: true },
+  })
+
+  if (!session) return null
+
+  if (session.expiresAt.getTime() < Date.now()) {
+    await prisma.adminSession.deleteMany({ where: { tokenHash } })
+    return null
   }
 
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md glass rounded-3xl p-8 border border-border">
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 mx-auto mb-4 bg-primary/10 rounded-2xl flex items-center justify-center">
-            <Lock className="w-7 h-7 text-primary" />
-          </div>
-          <h1 className="text-2xl font-bold">Painel Admin</h1>
-          <p className="text-muted-foreground mt-1">Entre para gerenciar os veículos</p>
-        </div>
+  if (!session.adminUser.isActive) return null
+  return session.adminUser
+}
 
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-                className="w-full pl-10 pr-4 py-3 bg-input border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-            </div>
-          </div>
+export async function requireAdmin() {
+  const admin = await getAdminFromCookies()
+  return admin ?? null
+}
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Senha</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full px-4 py-3 bg-input border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-
-          {error && (
-            <div className="text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-              {error}
-            </div>
-          )}
-
-          <Button
-            type="submit"
-            className="w-full h-12 rounded-xl bg-primary text-primary-foreground"
-            disabled={loading}
-          >
-            {loading ? "Entrando..." : "Entrar"}
-          </Button>
-
-          <p className="text-xs text-muted-foreground text-center">
-            Dica: configure ADMIN_EMAIL e ADMIN_PASSWORD e execute o seed.
-          </p>
-        </form>
-      </div>
-    </div>
-  )
+export async function requireAdminApi() {
+  const admin = await getAdminFromCookies()
+  if (!admin) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 })
+  }
+  return admin
 }
