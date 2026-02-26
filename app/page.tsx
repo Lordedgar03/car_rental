@@ -7,13 +7,16 @@ import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { getPublicCars } from "@/lib/server/cars"
 
+// 🔥 Isso impede o Vercel/Next de servir a home “congelada”
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function Home() {
   const cars = await getPublicCars()
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Faixa decorativa com cores da bandeira (opcional) */}
       <div className="flag-stripe fixed top-0 left-0 z-50"></div>
-      
+
       <Header />
       <Hero />
       <CarCatalog cars={cars} />
