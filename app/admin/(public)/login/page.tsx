@@ -1,12 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Lock, Mail } from "lucide-react"
 
 export default function AdminLoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -16,19 +14,29 @@ export default function AdminLoginPage() {
     e.preventDefault()
     setError(null)
     setLoading(true)
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email, password }),
+
+        // ✅ importante em produção para garantir persistência de cookie/sessão
+        credentials: "include",
+
+        // ✅ evita cache esquisito em edge/proxy
+        cache: "no-store",
       })
+
       const json = await res.json().catch(() => ({}))
+
       if (!res.ok) {
         setError(json?.error ?? "Falha no login")
         return
       }
-      router.push("/admin")
-      router.refresh()
+
+      // ✅ navegação “hard” garante que o SSR do /admin lê o cookie imediatamente
+      window.location.assign("/admin")
     } catch {
       setError("Erro de rede")
     } finally {
