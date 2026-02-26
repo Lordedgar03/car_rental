@@ -19,13 +19,8 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "content-type": "application/json" },
+        credentials: "include", // <- MUITO IMPORTANTE
         body: JSON.stringify({ email, password }),
-
-        // ✅ importante em produção para garantir persistência de cookie/sessão
-        credentials: "include",
-
-        // ✅ evita cache esquisito em edge/proxy
-        cache: "no-store",
       })
 
       const json = await res.json().catch(() => ({}))
@@ -35,8 +30,8 @@ export default function AdminLoginPage() {
         return
       }
 
-      // ✅ navegação “hard” garante que o SSR do /admin lê o cookie imediatamente
-      window.location.assign("/admin")
+      // Hard redirect garante que o próximo request já vai com o cookie
+      window.location.replace("/admin")
     } catch {
       setError("Erro de rede")
     } finally {
@@ -89,11 +84,7 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          <Button
-            type="submit"
-            className="w-full h-12 rounded-xl bg-primary text-primary-foreground"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
           </Button>
 
