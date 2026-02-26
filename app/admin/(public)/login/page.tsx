@@ -1,10 +1,12 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import React, { Suspense, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
-export default function AdminLoginPage() {
-  const router = useRouter()
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+function LoginInner() {
   const searchParams = useSearchParams()
 
   const nextUrl = useMemo(() => {
@@ -30,7 +32,6 @@ export default function AdminLoginPage() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email, password }),
-        // importante para garantir cookie de sessão também em produção
         credentials: "include",
         cache: "no-store",
       })
@@ -42,12 +43,8 @@ export default function AdminLoginPage() {
         return
       }
 
-      // navegação "hard" garante que o SSR revalida cookie/sessão imediatamente
+      // navegação "hard" para garantir SSR lendo o cookie imediatamente
       window.location.assign(nextUrl)
-
-      // alternativa (client navigation). Mantém comentado:
-      // router.replace(nextUrl)
-      // router.refresh()
     } catch {
       setError("Erro de rede. Verifica tua ligação e tenta novamente.")
     } finally {
@@ -130,13 +127,25 @@ export default function AdminLoginPage() {
           >
             {loading ? "Entrando..." : "Entrar"}
           </button>
-
-          <p className="text-xs text-muted-foreground text-center">
-            Dica: se estiveres a ser redirecionado após reload, confirma cookie <code>admin_session</code> e
-            se o layout protegido está com <code>dynamic = &quot;force-dynamic&quot;</code>.
-          </p>
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  // ✅ Suspense obrigatório quando se usa useSearchParams em páginas prerenderizadas
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center px-4">
+          <div className="w-full max-w-md rounded-3xl p-8 border border-border bg-card shadow-sm">
+            <div className="text-sm text-muted-foreground">Carregando…</div>
+          </div>
+        </div>
+      }
+    >
+      <LoginInner />
+    </Suspense>
   )
 }
