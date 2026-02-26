@@ -1,8 +1,15 @@
 import { prisma } from "@/lib/server/prisma"
+import { unstable_noStore as noStore } from "next/cache"
 
 export async function getPublicCars() {
+  // ✅ evita cache de render / data no App Router
+  noStore()
+
   const cars = await prisma.car.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      availabilityStatus: "available", // ✅ só disponíveis na home
+    },
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     select: {
       id: true,
@@ -20,6 +27,7 @@ export async function getPublicCars() {
       isActive: true,
     },
   })
+
   return cars
 }
 
