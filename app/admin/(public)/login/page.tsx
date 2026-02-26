@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Lock, Mail } from "lucide-react"
 
 export default function AdminLoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -19,19 +21,18 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        credentials: "include", // <- MUITO IMPORTANTE
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       })
 
       const json = await res.json().catch(() => ({}))
-
       if (!res.ok) {
         setError(json?.error ?? "Falha no login")
         return
       }
 
-      // Hard redirect garante que o próximo request já vai com o cookie
-      window.location.replace("/admin")
+      router.replace("/admin")
+      router.refresh()
     } catch {
       setError("Erro de rede")
     } finally {
@@ -84,7 +85,11 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full h-12 rounded-xl bg-primary text-primary-foreground"
+            disabled={loading}
+          >
             {loading ? "Entrando..." : "Entrar"}
           </Button>
 
