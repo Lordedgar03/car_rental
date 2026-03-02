@@ -15,7 +15,7 @@ export function Hero() {
         />
 
         {/* Overlay sutil para melhorar leitura */}
-       {/* <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/50 to-transparent" />*/}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/50 to-transparent" />
       </div>
       {/* Floating decorative elements */}
       <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-[var(--verde-stp)]/5 rounded-full blur-3xl animate-float" />
