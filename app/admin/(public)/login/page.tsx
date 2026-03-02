@@ -16,18 +16,22 @@ export default function AdminLoginPage() {
     e.preventDefault()
     setError(null)
     setLoading(true)
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "content-type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       })
+
       const json = await res.json().catch(() => ({}))
       if (!res.ok) {
         setError(json?.error ?? "Falha no login")
         return
       }
-      router.push("/admin")
+
+      router.replace("/admin")
       router.refresh()
     } catch {
       setError("Erro de rede")

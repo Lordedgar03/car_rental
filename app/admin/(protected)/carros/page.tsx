@@ -258,7 +258,7 @@ export default function AdminCarsPage() {
                     <p className="text-sm text-muted-foreground">{car.category}</p>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-foreground">STN {car.price}/dia</div>
+                    <div className="font-bold text-foreground">€ {car.price}/dia</div>
                     <div className="text-xs text-muted-foreground">{car.year}</div>
                   </div>
                 </div>

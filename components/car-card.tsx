@@ -11,7 +11,7 @@ interface CarCardProps {
 }
 
 export function CarCard({ car }: CarCardProps) {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "RC Veículos"
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "Veículos D'ALmeida"
   const whatsappE164 = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP_E164 ?? ""
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? ""
 
@@ -97,7 +97,7 @@ export function CarCard({ car }: CarCardProps) {
         <div className="flex items-center justify-between pt-5 border-t border-border/50">
           <div>
             <div className="flex items-baseline gap-1">
-              <span className="text-sm text-muted-foreground">STN</span>
+              <span className="text-sm text-muted-foreground">€</span>
               <span className="text-3xl font-bold gradient-text">{car.pricePerDay.toLocaleString("pt-pt")}</span>
             </div>
             <span className="text-xs text-muted-foreground">por dia</span>

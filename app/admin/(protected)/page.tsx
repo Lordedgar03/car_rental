@@ -111,7 +111,7 @@ export default function AdminDashboard() {
     },
     {
       label: "Receita Estimada",
-      value: `STN ${estimatedRevenue.toLocaleString("pt-BR")}`,
+      value: `€ ${estimatedRevenue.toLocaleString("pt-BR")}`,
       icon: DollarSign,
       color: "text-primary",
       bgColor: "bg-primary/10",
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <div className="font-semibold text-foreground">
-                        {est != null ? `STN ${est.toLocaleString("pt-BR")}` : "—"}
+                        {est != null ? `€ ${est.toLocaleString("pt-BR")}` : "—"}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {lead.pickupDate ? new Date(lead.pickupDate).toLocaleDateString("pt-BR") : "—"}

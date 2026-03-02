@@ -1,7 +1,7 @@
 "use client"
 import { ArrowRight, MessageCircle, Star, Shield, Clock } from "lucide-react";
 
-const HERO_BG = "https://mgx-backend-cdn.metadl.com/generate/images/355658/2026-02-16/0563da08-56cf-4887-8c70-eb2f0d658d45.png";
+const HERO_BG = "/images/hero-stp.jpg";
 
 export function Hero() {
   return (
@@ -13,10 +13,10 @@ export function Hero() {
           alt="Praia de São Tomé e Príncipe"
           className="w-full h-full object-cover object-center scale-105"
         />
-        {/* Multi-layer gradients */}
-        
-      </div>
 
+        {/* Overlay sutil para melhorar leitura */}
+       {/* <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/50 to-transparent" />*/}
+      </div>
       {/* Floating decorative elements */}
       <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-[var(--verde-stp)]/5 rounded-full blur-3xl animate-float" />
       <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[var(--amarelo-stp)]/5 rounded-full blur-3xl animate-float delay-300" />
@@ -58,11 +58,10 @@ export function Hero() {
               <ArrowRight className="w-5 h-5" />
             </a>
             <a
-              href="https://wa.me/2399999999"
+              href="https://wa.me/+2399034266"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium border border-border/50 text-foreground hover:bg-card hover:border-[var(--verde-stp)]/50 rounded-xl glass transition-all duration-300"
-            >
+              className="btn-stp text-base px-8 py-4 justify-center">
               <MessageCircle className="w-5 h-5" />
               Falar no WhatsApp
             </a>
@@ -84,10 +83,17 @@ export function Hero() {
 
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden lg:flex flex-col items-center gap-2">
-        <span className="text-lg lg:text-xl text-foreground uppercase tracking-widest">Conheça os carros</span>
-        <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center pt-2">
-          <div className="w-1 h-2 bg-[var(--verde-stp)] rounded-full animate-bounce" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 hidden lg:flex flex-col items-center gap-3">
+        {/* Texto dentro de uma pill com glass effect */}
+        <div className="px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-lg">
+          <span className="text-xs lg:text-sm font-medium text-white tracking-[0.25em] uppercase">
+            Conheça os carros
+          </span>
+        </div>
+
+        {/* “Mouse” com bolinha animada */}
+        <div className="w-7 h-11 border-2 border-white/70 rounded-full flex justify-center pt-2 shadow-md bg-black/20 backdrop-blur">
+          <div className="w-1.5 h-3 bg-[var(--verde-stp)] rounded-full animate-bounce" />
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import { Shield, Clock, Wrench, Heart, CheckCircle, Quote } from "lucide-react";
 
-const ABOUT_BG = "https://mgx-backend-cdn.metadl.com/generate/images/355658/2026-02-16/54290a62-1bfc-4c74-ac8b-425cbcb9ab56.png";
+const ABOUT_BG = "/images/abaut.jpg";
 
 const features = [
   {
@@ -60,7 +60,7 @@ export function About() {
               <span className="gradient-text">atendimento pessoal</span>
             </h2>
 
-            <div className="space-y-5 text-foreground leading-relaxed mb-8">
+            <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8">
               <p className="text-lg">
                 Locação de veículos em São Tomé e Príncipe .
                 Com uma frota de carros

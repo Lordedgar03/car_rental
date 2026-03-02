@@ -1,6 +1,6 @@
 import { Search, Calendar, Car, ThumbsUp, ArrowRight } from "lucide-react";
 
-const CTA_BG = "https://mgx-backend-cdn.metadl.com/generate/images/355658/2026-02-16/9a3dc487-36a3-4a99-bcc0-71b58d3eb1b5.png";
+const CTA_BG = "/images/how.jpg";
 
 const steps = [
   {

@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useState } from "react"
 import { LayoutDashboard, Car, Calendar, Home, LogOut } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -20,25 +21,28 @@ import {
 } from "@/components/ui/sidebar"
 
 const navigationItems = [
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Veículos",
-    url: "/admin/carros",
-    icon: Car,
-  },
-  {
-    title: "Pedidos/Leads",
-    url: "/admin/reservas",
-    icon: Calendar,
-  },
+  { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
+  { title: "Veículos", url: "/admin/carros", icon: Car },
+  { title: "Pedidos/Leads", url: "/admin/reservas", icon: Calendar },
 ]
 
 function AdminSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const [loggingOut, setLoggingOut] = useState(false)
+
+  async function handleLogout() {
+    setLoggingOut(true)
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" })
+    } catch {
+      // se falhar, ainda assim tentamos navegar para login
+    } finally {
+      router.replace("/admin/login")
+      router.refresh()
+      setLoggingOut(false)
+    }
+  }
 
   return (
     <Sidebar className="border-r border-border">
@@ -89,11 +93,21 @@ function AdminSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border p-4">
-        <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-          <Link href="/admin/logout">
-            <LogOut className="h-4 w-4 mr-2" />
-            Sair
-          </Link>
+        {/*
+          IMPORTANTÍSSIMO:
+          Não usar <Link href="/admin/logout"> para logout com GET.
+          No Next em produção o Link pode ser prefetchado e executar o GET automaticamente,
+          limpando o cookie e causando logout “sozinho”.
+        */}
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start"
+          onClick={handleLogout}
+          disabled={loggingOut}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          {loggingOut ? "Saindo..." : "Sair"}
         </Button>
       </SidebarFooter>
     </Sidebar>

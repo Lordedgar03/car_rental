@@ -28,13 +28,13 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-muted-foreground leading-relaxed max-w-sm mb-6">
-              Locacao de veiculos com atendimento personalizado em Sao Paulo.
+              Locacao de veiculos com atendimento personalizado em Sao Tomé e Príncipe.
               Carros revisados, precos justos e suporte durante todo o periodo.
             </p>
             {/* Social links */}
             <div className="flex gap-3">
               <a
-                href="https://wa.me/5511999999999"
+                href="https://wa.me/+2399034266"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 glass rounded-xl flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
@@ -86,7 +86,7 @@ export function Footer() {
             <h3 className="font-semibold text-foreground mb-5">Contato</h3>
             <div className="space-y-3 text-sm text-muted-foreground">
               <p>Sao Tomé</p>
-              <p>(+239) 99999-9999</p>
+              <p>(+239) 9034266</p>
               <p>veiculosalmeida@gamil.com</p>
               <p className="pt-2 text-xs">Atendimento: 7h as 22h</p>
             </div>

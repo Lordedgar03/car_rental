@@ -17,8 +17,8 @@ const CONTACT_BG =
 
 const contactInfo = [
   { icon: MapPin, title: "Localização", content: "São Tomé, São Tomé e Príncipe" },
-  { icon: Phone, title: "Telefone / WhatsApp", content: "+239 999 9999" },
-  { icon: Mail, title: "E-mail", content: "ricardo@rcveiculos.st" },
+  { icon: Phone, title: "Telefone / WhatsApp", content: "+2399034266" },
+  { icon: Mail, title: "E-mail", content: "veiculosalmeida@gamil.com" },
   { icon: Clock, title: "Atendimento", content: "Todos os dias: 7h às 22h" },
 ]
 
@@ -49,7 +49,7 @@ export function Contact({ cars }: Props) {
   const whatsappLink = useMemo(() => {
     const carText = selectedCar ? `${selectedCar.name} (${selectedCar.year})` : ""
     const parts = [
-      `Olá! Vim pelo site RC Veículos.`,
+      `Olá! Vim pelo site Veículos D'ALmeida.`,
       carText ? `Interesse: ${carText}` : null,
       formData.pickupDate ? `Retirada: ${formData.pickupDate}` : null,
       formData.returnDate ? `Devolução: ${formData.returnDate}` : null,
@@ -61,7 +61,7 @@ export function Contact({ cars }: Props) {
       .filter(Boolean)
       .join("\n")
 
-    return `https://wa.me/2399999999?text=${encodeURIComponent(parts)}`
+    return `https://wa.me/+2399034266?text=${encodeURIComponent(parts)}`
   }, [formData, selectedCar])
 
   const mailLink = useMemo(() => {
@@ -146,7 +146,7 @@ export function Contact({ cars }: Props) {
                   Se preferir, chame direto no WhatsApp e confirmamos a disponibilidade.
                 </p>
                 <a
-                  href="https://wa.me/2399999999"
+                  href="https://wa.me/+2399034266"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors duration-300"
